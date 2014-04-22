@@ -72,7 +72,7 @@ public class SendEmail {
                         + " Below you will see a link to a Google Form that you will fill out for the dance. "
                         + "Please carefully read and follow all of the instructions listed in the form. "
                         + "You have no obligation to participate in this matching system."
-                        + "\n\n" \\add a URL to a Google Form here
+                        + "\n\n" //add a URL to a Google Form here
                         + "\n\nEnjoy senior week!\n\nP.S. I know you're not supposed to click on links from unknown"
                         + " email addresses but it's just a Google Form and I'm a student here also.");
 
