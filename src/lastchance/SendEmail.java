@@ -10,8 +10,8 @@ import javax.mail.internet.*;
  * @author Anders Peterson
  */
 public class SendEmail {
-    private static final String username = ""; //add email address to send from here
-    private static final String password = ""; //add email account password here
+    private static final String username = ""; //ADD EMAIL ADDRESS TO SEND FROM HERE
+    private static final String password = ""; //ADD EMAIL ACCOUNT PASSWORD HERE
 
     public static void sendMatches(HashMap<String,Person> everyone) {
         Properties props = new Properties();
@@ -72,7 +72,7 @@ public class SendEmail {
                         + " Below you will see a link to a Google Form that you will fill out for the dance. "
                         + "Please carefully read and follow all of the instructions listed in the form. "
                         + "You have no obligation to participate in this matching system."
-                        + "\n\n" //add a URL to a Google Form here
+                        + "\n\n" //ADD A URL TO A GOOGLE FORM HERE
                         + "\n\nEnjoy senior week!\n\nP.S. I know you're not supposed to click on links from unknown"
                         + " email addresses but it's just a Google Form and I'm a student here also.");
 
