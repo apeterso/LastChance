@@ -10,7 +10,7 @@ import javax.mail.internet.*;
  * @author Anders Peterson
  */
 public class SendEmail {
-	private static final String username = ""; //add email address to send from here
+    private static final String username = ""; //add email address to send from here
     private static final String password = ""; //add email account password here
 
     public static void sendMatches(HashMap<String,Person> everyone) {
