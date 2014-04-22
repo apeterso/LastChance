@@ -10,10 +10,10 @@ import javax.mail.internet.*;
  * @author Anders Peterson
  */
 public class SendEmail {
-    public static void sendMatches(HashMap<String,Person> everyone) {
-        final String username = ""; \\add email address to send from here
-        final String password = ""; \\add email account password here
+	private static final String username = ""; //add email address to send from here
+    private static final String password = ""; //add email account password here
 
+    public static void sendMatches(HashMap<String,Person> everyone) {
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
@@ -48,9 +48,6 @@ public class SendEmail {
     }
     
     public static void sendForm(String[] addresses) {
-        final String username = ""; \\add an email address here
-        final String password = ""; \\add the account password here
-
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
