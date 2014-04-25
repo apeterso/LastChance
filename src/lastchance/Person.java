@@ -5,11 +5,22 @@ import java.util.ArrayList;
  *
  * @author Anders Peterson
  */
-public class Person {
+public class Person implements Comparable<Person>{
     private String myName;
     private String email;
+    private int timesChosen;
     private ArrayList<String> choices;
     private ArrayList<String> matches;
+    
+    public int compareTo(Person person){
+        if(this.getTimesChosen() < person.getTimesChosen()){
+            return 1;
+        } else if(this.getTimesChosen() == person.getTimesChosen()){
+            return 0;
+        } else{
+            return -1;
+        }
+    }
     
     public Person(String name){
         myName = name;
@@ -37,12 +48,20 @@ public class Person {
         matches.add(name);
     }
     
+    public void chosen(){
+        timesChosen++;
+    }
+    
     public ArrayList<String> getMatches(){
         return matches;
     }
     
     public ArrayList<String> getChoices(){
         return choices;
+    }
+    
+    public int getTimesChosen(){
+        return timesChosen;
     }
     
     public void printMatches(){

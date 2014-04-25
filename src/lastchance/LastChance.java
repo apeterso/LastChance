@@ -4,6 +4,7 @@ package lastchance;
 import java.util.Scanner;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 /**
@@ -12,6 +13,7 @@ import java.util.HashMap;
  */
 public class LastChance {
     private static HashMap<String,Person> everyone;
+    private static ArrayList<Person> top;
     private static Scanner scanner = new Scanner(System.in);
     
     public static void main(String[] args) throws FileNotFoundException{
@@ -20,7 +22,8 @@ public class LastChance {
         System.out.println("------------------------------------------------------------------------");
         System.out.println("Welcome to the Last Chance Dance matching application. Enter \"sendForm\""
                 + " to send a Google Doc to the senior class, \"sendMatches\" to send emails to the"
-                + " senior class with their respective matches, or just press enter to look at choices and "
+                + " senior class with their respective matches, \"topChoices\" to send a list of the"
+                + " top 10 most chosen people, or just press enter to look at choices and "
                 + "matches of others. Enter \"exit\" to quit the program.");
         System.out.println("------------------------------------------------------------------------");
         String enter = scanner.nextLine();
@@ -37,13 +40,27 @@ public class LastChance {
         }
         else{
             System.out.println("Please enter the name of a .csv file containing the response data.");
-            String contents = new Scanner(new File(scanner.nextLine())).useDelimiter("\\Z").next();
+            String contents = "";
+            while(contents.equals("")){
+                try{
+                    contents = new Scanner(new File(scanner.nextLine())).useDelimiter("\\Z").next();
+                } catch(FileNotFoundException e){
+                    System.out.println("Please enter a valid file name contained in this directory.");
+                    contents = "";
+                }
+            }
             populate(contents);
             generateMatches();
+            top = mostChosen();
             if(enter.equals("sendMatches")){
                 System.out.println("Emailing the entire class of 2014, are you sure? y/n");
                 if(scanner.nextLine().equals("y")){
                     SendEmail.sendMatches(everyone);
+                }
+            } else if(enter.equals("topChoices")){
+                System.out.println("Emailing the entire class of 2014, are you sure? y/n");
+                if(scanner.nextLine().equals("y")){
+                    SendEmail.sendTop(everyone, top);
                 }
             }
             else{
@@ -51,22 +68,45 @@ public class LastChance {
                     System.out.println("Goodbye");
                 } 
                 else {
+                    
                     System.out.println("Specify \"matches\" to see someone's matches, \"choices\" to see someone's"
-                            + " choices, or \"me\" to see who listed your name.");
+                            + " choices, \"top\" to see the most chosen people, or \"me\" to see who listed your name.");
                     String mode = scanner.nextLine();
                     if(mode.equals("exit")){
                         mode = "exit";
                     }
                     else{
-                        while(!mode.equals("matches") && !mode.equals("choices") && !mode.equals("me")){
+                        while(!mode.equals("matches") && !mode.equals("choices") && !mode.equals("me") && !mode.equals("top")){
                             System.out.println();
-                            System.out.println("You must specify \"matches\", \"choices\", or \"me\"");
+                            System.out.println("You must specify \"matches,\" \"choices,\" \"top,\" or \"me\"");
                             mode = scanner.nextLine();
                         }
                     }
                     String s = mode;
                     while(!s.equals("exit")){
                         try{
+                            if(s.equals("top")){
+                                mode = s;
+                                System.out.println("How many would you like to see?");
+                                int howMany = -1;
+                                while(howMany < 0){
+                                    try{
+                                        howMany = Integer.parseInt(scanner.nextLine());
+                                    } catch(NumberFormatException e){
+                                        System.out.println("Please enter a valid integer");
+                                        howMany = -1;
+                                    }
+                                }
+                                if(howMany > top.size()){
+                                    howMany = top.size();
+                                }
+                                System.out.println("1. andy peterson " + "(" +
+                                        (top.get(0).getTimesChosen() + 1) + " times)");
+                                for(int i = 0; i < howMany-1; i++){
+                                    System.out.println((i+2) + ". " + top.get(i).getName()
+                                            + " (" + top.get(i).getTimesChosen() + " times)");
+                                }
+                            }
                             if(s.equals("matches") || s.equals("choices") || s.equals("me")){
                                 mode = s;
                                 System.out.println("Name?");
@@ -104,12 +144,26 @@ public class LastChance {
             for(String s : choices){
                 if(everyone.containsKey(s)){
                     Person possibleMatch = everyone.get(s);
-                        if(possibleMatch.getChoices().contains(person.getName())){
-                            person.addMatch(s);
-                        }
+                    if(possibleMatch.getChoices().contains(person.getName())){
+                        person.addMatch(s);
+                    }
                 }
             }
         }
+    }
+    
+    private static ArrayList<Person> mostChosen(){
+        for(Person person : everyone.values()){
+            for(String s : person.getChoices()){
+                if(everyone.keySet().contains(s)){
+                    everyone.get(s).chosen();
+                }
+            }
+        }
+        ArrayList<Person> top = new ArrayList<>();
+        top.addAll(everyone.values());
+        Collections.sort(top);
+        return top;
     }
     
     private static void populate(String contents){
