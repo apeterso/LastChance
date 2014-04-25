@@ -126,7 +126,7 @@ public class SendEmail {
                     sb.append(" times)\n");
                 }
                 
-                message.setText("Hello, " + p.getName() + "\n\nBelow is a list of the top 10 most"
+                message.setText("Hello " + p.getName() + ",\n\nBelow is a list of the top 10 most"
                         + " chosen students for this year's last chance dance.\n\n" + sb.toString() +
                         "\n\nEnjoy senior week!");
                 
