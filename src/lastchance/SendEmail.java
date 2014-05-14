@@ -130,8 +130,13 @@ public class SendEmail {
                     sb.append(top.get(j).getTimesChosen());
                     sb.append(" times)\n");
                 }
+<<<<<<< HEAD
 
                 message.setText("Hello " + ((Person) people[i]).getName() + ",\n\nBelow is a list of the top 10 most"
+=======
+                
+                message.setText("Hello " + p.getName() + ",\n\nBelow is a list of the top 10 most"
+>>>>>>> bb809bc9ab892356dd5621ae62ab76e7d6e736bd
                         + " chosen students for this year's last chance dance.\n\n" + sb.toString() +
                         "\n\nEnjoy senior week!");
 
