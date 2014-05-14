@@ -16,15 +16,15 @@ public class LastChance {
     private static ArrayList<Person> top;
     private static Scanner scanner = new Scanner(System.in);
     
-    public static void main(String[] args) throws FileNotFoundException{
+    public static void main(String[] args) throws FileNotFoundException, InterruptedException{
         everyone = new HashMap<>();
         System.out.println("Author: Anders Peterson");
         System.out.println("------------------------------------------------------------------------");
         System.out.println("Welcome to the Last Chance Dance matching application. Enter \"sendForm\""
                 + " to send a Google Doc to the senior class, \"sendMatches\" to send emails to the"
                 + " senior class with their respective matches, \"topChoices\" to send a list of the"
-                + " top 10 most chosen people, or just press enter to look at choices and "
-                + "matches of others. Enter \"exit\" to quit the program.");
+                + " top 10 most chosen people, or just press enter to look at the collected data."
+                + " Enter \"exit\" to quit the program.");
         System.out.println("------------------------------------------------------------------------");
         String enter = scanner.nextLine();
         
@@ -49,8 +49,11 @@ public class LastChance {
                     contents = "";
                 }
             }
+            System.out.println("populating...");
             populate(contents);
+            System.out.println("generating matches...");
             generateMatches();
+            System.out.println("finding most chosen...");
             top = mostChosen();
             if(enter.equals("sendMatches")){
                 System.out.println("Emailing the entire class of 2014, are you sure? y/n");
@@ -100,7 +103,7 @@ public class LastChance {
                                 if(howMany > top.size()){
                                     howMany = top.size();
                                 }
-                                System.out.println("1. andy peterson " + "(" +
+                                System.out.println("1. anders peterson " + "(" +
                                         (top.get(0).getTimesChosen() + 1) + " times)");
                                 for(int i = 0; i < howMany-1; i++){
                                     System.out.println((i+2) + ". " + top.get(i).getName()
@@ -119,11 +122,14 @@ public class LastChance {
                                 everyone.get(s).printChoices();
                                 System.out.println();
                             } if(mode.equals("me")){
+                                int matches = 0;
                                 for(Person p : everyone.values()){
                                     if(p.getChoices().contains(s)){
+                                        matches++;
                                         System.out.println(p.getName());
                                     }
                                 }
+                                if(matches == 0){ System.out.println("Not chosen or not in system."); }
                                 System.out.println();
                             }
                             s = scanner.nextLine();
