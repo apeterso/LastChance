@@ -10,8 +10,8 @@ import javax.mail.internet.*;
  * @author Anders Peterson
  */
 public class SendEmail {
-    private static final String username = ;//gmail address here
-    private static final String password = ;//gmail password here
+    private static final String username = ; //add gmail address here
+    private static final String password = ; //add account password here
     
     public static void sendMatches(HashMap<String,Person> everyone) throws InterruptedException {
         Properties props = new Properties();
@@ -77,14 +77,13 @@ public class SendEmail {
                         + "Please carefully read and follow all of the instructions listed in the form. "
                         + "Additionally, please complete the form by 5:00pm on Monday May 19th. "
                         + "You have no obligation to participate in this matching system."
-                        + "" //Google Form address here
+                        + //add Google form link here
                         + "\n\nGood luck with finals!");
 
                 Transport.send(message);
 
-                System.out.println("Sent to: " + i);
+                System.out.println("Sent to: " + addresses[i]);
             } catch (MessagingException e) {
-                System.out.println("not sent to address #" + i);
                 System.out.println("not sent to " + addresses[i]);
                 System.out.println("too many login attempts, waiting 2 minutes...");
                 i--;

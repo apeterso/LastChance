@@ -32,8 +32,16 @@ public class LastChance {
             System.out.println("Emailing the entire class of 2014, are you sure? y/n");
             if(scanner.nextLine().equals("y")){
                 System.out.println("Please enter the name of a file containing email addresses.");
-                String fileName = scanner.nextLine();
-                String emailList = new Scanner(new File(fileName)).useDelimiter("\\Z").next();
+                String emailList = "";
+                while(emailList.equals("")){
+                    try{
+                        String fileName = scanner.nextLine();
+                        emailList = new Scanner(new File(fileName)).useDelimiter("\\Z").next();
+                    } catch(FileNotFoundException e){
+                        System.out.println("Please enter a valid file name contained in this directory.");
+                        emailList = "";
+                    }
+                }
                 String[] emails = emailList.split("\n");
                 SendEmail.sendForm(emails);
             }
