@@ -10,8 +10,9 @@ import javax.mail.internet.*;
  * @author Anders Peterson
  */
 public class SendEmail {
-    private static final String username = ; //add gmail address here
-    private static final String password = ; //add account password here
+    private static final String username = ""; //enter gmail address here
+    private static final String password = ""; //enter account password here
+    private static Scanner scanner = new Scanner(System.in);
     
     public static void sendMatches(HashMap<String,Person> everyone) throws InterruptedException {
         Properties props = new Properties();
@@ -42,9 +43,16 @@ public class SendEmail {
                 Transport.send(message);
 
                 System.out.println("Matches sent to: " + ((Person) people[i]).getEmail());
+            } catch (SendFailedException e) {
+                System.out.println("Invalid email address " + ((Person) people[i]).getEmail() + " encountered, enter new email address or press enter to skip");
+                String newEmail = scanner.nextLine();
+                if(newEmail.length() != 0){
+                    ((Person) people[i]).addEmail(newEmail);
+                    i--;
+                }
             } catch (MessagingException e) {
-                System.out.println("not sent to " + ((Person) people[i]).getEmail());
-                System.out.println("too many login attempts, waiting 2 minutes...");
+                System.out.println("Not sent to " + ((Person) people[i]).getEmail());
+                System.out.println("Too many login attempts, waiting 2 minutes...");
                 Thread.sleep(120000);
                 i--;
             }
@@ -77,15 +85,22 @@ public class SendEmail {
                         + "Please carefully read and follow all of the instructions listed in the form. "
                         + "Additionally, please complete the form by 5:00pm on Monday May 19th. "
                         + "You have no obligation to participate in this matching system."
-                        + //add Google form link here
+                        + "" //enter gmail URL here
                         + "\n\nGood luck with finals!");
 
                 Transport.send(message);
 
                 System.out.println("Sent to: " + addresses[i]);
+            } catch (SendFailedException e) {
+                System.out.println("Invalid email address " + addresses[i] + " encountered, enter new email address or press enter to skip");
+                String newEmail = scanner.nextLine();
+                if(newEmail.length() != 0){
+                    addresses[i] = newEmail;
+                    i--;
+                }
             } catch (MessagingException e) {
-                System.out.println("not sent to " + addresses[i]);
-                System.out.println("too many login attempts, waiting 2 minutes...");
+                System.out.println("Not sent to " + addresses[i]);
+                System.out.println("Too many login attempts, waiting 2 minutes...");
                 i--;
                 Thread.sleep(120000);
             }
@@ -120,27 +135,44 @@ public class SendEmail {
                 sb.append(" times)\n");
                 
                 int num = top.size() < 10 ? top.size() : 10;
-
+                int index = 2;
                 for(int j = 0; j < num - 1; j++){
-                    sb.append(j + 2);
+                    sb.append(index);
                     sb.append(". ");
                     sb.append(top.get(j).getName());
+                    int temp = j;
+                    while(top.get(j).getTimesChosen() == top.get(j + 1).getTimesChosen()){
+                        j++;
+                        num++;
+                        sb.append(", " + top.get(j).getName());
+                    }
                     sb.append(" (");
                     sb.append(top.get(j).getTimesChosen());
                     sb.append(" times)\n");
+                    index++;
+                    if(index == num - 1){
+                        j = num - 1;
+                    }
                 }
 
-                message.setText("Hello " + ((Person) people[i]).getName() + ",\n\nBelow is a list of the top 10 most"
-                        + " chosen students for this year's last chance dance.\n\n" + sb.toString() +
+                message.setText("Hello " + ((Person) people[i]).getName() + ",\n\nBelow is a ranking of the most"
+                        + " chosen students for this year's last chance dance.\n\n" + sb.toString() + 
                         "\n\nEnjoy senior week!");
 
 
                 Transport.send(message);
 
                 System.out.println("Sent to: " + ((Person) people[i]).getEmail());
+            } catch (SendFailedException e) {
+                System.out.println("Invalid email address " + ((Person) people[i]).getEmail() + " encountered, enter new email address or press enter to skip");
+                String newEmail = scanner.nextLine();
+                if(newEmail.length() != 0){
+                    ((Person) people[i]).addEmail(newEmail);
+                    i--;
+                }
             } catch (MessagingException e) {
-                System.out.println("not sent to " + ((Person) people[i]).getEmail());
-                System.out.println("too many login attempts, waiting 2 minutes...");
+                System.out.println("Not sent to " + ((Person) people[i]).getEmail());
+                System.out.println("Too many login attempts, waiting 2 minutes...");
                 Thread.sleep(120000);
                 i--;
             }

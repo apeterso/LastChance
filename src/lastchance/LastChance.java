@@ -167,15 +167,43 @@ public class LastChance {
     }
     
     private static ArrayList<Person> mostChosen(){
+        ArrayList<Person> top = new ArrayList<>();
         for(Person person : everyone.values()){
             for(String s : person.getChoices()){
                 if(everyone.keySet().contains(s)){
                     everyone.get(s).chosen();
+                } else{
+                    Person dummy = new Person(s);
+                    if(top.isEmpty()){
+                        dummy.chosen();
+                        top.add(dummy);
+                    }
+                    else{
+                        boolean alreadyAdded = false;
+                        for(int i = 0; i < top.size(); i++){
+                            if(top.get(i).getName().equals(s)){
+                                top.get(i).chosen();
+                                i = top.size();
+                                alreadyAdded = true;
+                            }
+                        }
+                        if(!alreadyAdded){
+                            dummy.chosen();
+                            top.add(dummy);
+                            System.out.println(s + " added");
+                        }
+                    }
                 }
             }
         }
-        ArrayList<Person> top = new ArrayList<>();
         top.addAll(everyone.values());
+        for(int i = 0; i < top.size(); i++){
+            if(top.get(i).getName().equals("")){
+                top.remove(i);
+            }
+        }
+        
+        
         Collections.sort(top);
         return top;
     }
@@ -194,9 +222,9 @@ public class LastChance {
             person.addEmail(email);
             i++;
 
-            for(int j = 1; j < 11; j++){
+            for(int j = 1; j < 12; j++){
                 if(names[i].equals("new person")){
-                    j = 11;
+                    j = 12;
                 }
                 else{
                     person.addName(names[i]);
